@@ -13,8 +13,6 @@ const ACCEPTED_TYPES: Record<string, string[]> = {
     "text/plain": [".txt"],
     "text/markdown": [".md"],
     "text/csv": [".csv"],
-    "image/png": [".png"],
-    "image/jpeg": [".jpg", ".jpeg"],
 };
 
 export function EmptyState() {
