@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #f1f1f1;
+  --card: #111111;
+  --card-foreground: #f1f1f1;
+  --popover: #111111;
+  --popover-foreground: #f1f1f1;
+  --primary: #ef4444;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #f1f1f1;
+  --muted: #1a1a1a;
+  --muted-foreground: #888888;
+  --accent: #ef4444;
+  --accent-foreground: #ffffff;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f1f1f1;
+  --border: #222222;
+  --input: #1a1a1a;
+  --ring: #ef4444;
+  --radius: 0.625rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* react-doc-viewer overrides for dark theme */
+#react-doc-viewer #header-bar {
+  display: none !important;
+}
+
+#react-doc-viewer #proxy-renderer {
+  background: #0a0a0a !important;
+}
+
+#react-doc-viewer {
+  background: #0a0a0a !important;
+  border: none !important;
+}
+
+/* Markdown rendering in chat */
+.prose-chat {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.prose-chat p {
+  margin-bottom: 0.5rem;
+}
+
+.prose-chat p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-chat ul,
+.prose-chat ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.prose-chat li {
+  margin-bottom: 0.25rem;
+}
+
+.prose-chat code {
+  background: #1a1a1a;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.prose-chat pre {
+  background: #1a1a1a;
+  padding: 0.75rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.prose-chat pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.prose-chat strong {
+  color: #f1f1f1;
+  font-weight: 600;
+}
+
+.prose-chat h1, .prose-chat h2, .prose-chat h3 {
+  color: #f1f1f1;
+  font-weight: 600;
+  margin: 0.75rem 0 0.35rem;
+}
+
+/* Resize handle styling */
+[data-panel-resize-handle-id] {
+  transition: background-color 0.15s ease;
+}
+
+[data-panel-resize-handle-id]:hover,
+[data-panel-resize-handle-id][data-resize-handle-active] {
+  background-color: #ef4444 !important;
+}
+
+/* Upload progress animation */
+@keyframes progress-bar {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  90% { width: 90%; }
+  100% { width: 100%; }
+}
+
+.animate-progress {
+  animation: progress-bar 2s ease-in-out;
 }
