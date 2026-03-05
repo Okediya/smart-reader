@@ -9,7 +9,6 @@ import { toast } from "sonner";
 const ACCEPTED_TYPES: Record<string, string[]> = {
     "application/pdf": [".pdf"],
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"],
     "text/plain": [".txt"],
     "text/markdown": [".md"],
     "text/csv": [".csv"],
@@ -74,7 +73,21 @@ export function EmptyState() {
     );
 
     const onDrop = useCallback(
-        (acceptedFiles: File[]) => {
+        (acceptedFiles: File[], fileRejections: any[]) => {
+            if (fileRejections.length > 0) {
+                const rejectedFile = fileRejections[0].file;
+                if (rejectedFile.name.toLowerCase().endsWith(".pptx") || rejectedFile.name.toLowerCase().endsWith(".ppt")) {
+                    toast.error(
+                        <div className="flex flex-col gap-1">
+                            <span className="font-medium">PPTX files are not directly supported.</span>
+                            <span className="text-sm">Please convert your presentation to a PDF using a free tool like <a href="https://www.ilovepdf.com/powerpoint_to_pdf" target="_blank" rel="noopener noreferrer" className="underline text-[#ef4444] hover:text-[#dc2626]">iLovePDF here</a>, then upload the resulting PDF.</span>
+                        </div>,
+                        { duration: 8000 }
+                    );
+                    return;
+                }
+            }
+
             if (acceptedFiles.length > 0) {
                 processFile(acceptedFiles[0]);
             }
@@ -101,7 +114,7 @@ export function EmptyState() {
                     <span className="text-[#ef4444]">Smart</span> Reader
                 </h1>
                 <p className="text-[#888] mb-8 text-base leading-relaxed">
-                    Upload PDF, PPTX, DOCX and more, then chat instantly with Buddy.
+                    Upload PDF, DOCX, TXT and more, then chat instantly with Buddy.
                     <br />
                     Your documents, understood by AI.
                 </p>
@@ -135,7 +148,7 @@ export function EmptyState() {
                                 {isDragActive ? "Drop your file here" : "Drag and drop your document"}
                             </p>
                             <p className="text-sm text-[#666]">
-                                or click to browse -- PDF, DOCX, PPTX, TXT supported
+                                or click to browse -- PDF, DOCX, TXT supported
                             </p>
                         </div>
                     </div>
@@ -143,7 +156,7 @@ export function EmptyState() {
 
                 {/* Supported formats */}
                 <div className="mt-6 flex items-center justify-center gap-2 flex-wrap">
-                    {["PDF", "DOCX", "PPTX", "TXT", "MD", "CSV"].map((fmt) => (
+                    {["PDF", "DOCX", "TXT", "MD", "CSV"].map((fmt) => (
                         <span
                             key={fmt}
                             className="text-xs px-2.5 py-1 rounded-md bg-[#111] border border-[#222] text-[#888]"

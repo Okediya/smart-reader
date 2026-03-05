@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * POST /api/extract
  * Receives a file upload and extracts text content based on file type.
- * Supports: PDF, DOCX, PPTX, TXT, MD, CSV
+ * Supports: PDF, DOCX, TXT, MD, CSV
  */
 export async function POST(request: NextRequest) {
     try {
@@ -29,11 +29,6 @@ export async function POST(request: NextRequest) {
                 const docxRes = await extractDocx(buffer);
                 text = docxRes.text;
                 html = docxRes.html;
-                break;
-            case "pptx":
-                const pptxRes = await extractPptx(buffer);
-                text = pptxRes.text;
-                html = pptxRes.html;
                 break;
             case "txt":
             case "md":
