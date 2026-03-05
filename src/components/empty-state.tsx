@@ -40,8 +40,21 @@ export function EmptyState() {
                 setProcessingProgress(70);
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || "Failed to extract text");
+                    let errorMessage = "Failed to extract text";
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.error || errorMessage;
+                    } catch (e) {
+                        // Handle case where Vercel returns HTML (e.g. 413 Payload Too Large or 504 Gateway Timeout)
+                        if (response.status === 413) {
+                            errorMessage = "File is too large for the Vercel server. Please upload a smaller file.";
+                        } else if (response.status === 504) {
+                            errorMessage = "The extraction timed out on the server. Please try a smaller file.";
+                        } else {
+                            errorMessage = `Server error ${response.status}: Failed to process document`;
+                        }
+                    }
+                    throw new Error(errorMessage);
                 }
 
                 const data = await response.json();
