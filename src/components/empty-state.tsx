@@ -57,7 +57,16 @@ export function EmptyState() {
                     } catch (e) {
                         // Handle case where Vercel returns HTML (e.g. 413 Payload Too Large or 504 Gateway Timeout)
                         if (response.status === 413) {
-                            errorMessage = "File is too large for the Vercel server. Please upload a smaller file.";
+                            toast.error(
+                                <div className="flex flex-col gap-1">
+                                    <span className="font-medium">File is too large for the current server limits.</span>
+                                    <span className="text-sm">Please compress your PDF to make it smaller than 4.5MB using a free tool like <a href="https://www.ilovepdf.com/compress_pdf" target="_blank" rel="noopener noreferrer" className="underline text-[#ef4444] hover:text-[#dc2626]">iLovePDF Compress</a>, then upload the smaller file.</span>
+                                </div>,
+                                { duration: 10000 }
+                            );
+                            removeFile();
+                            setIsProcessing(false);
+                            return;
                         } else if (response.status === 504) {
                             errorMessage = "The extraction timed out on the server. Please try a smaller file.";
                         } else {
