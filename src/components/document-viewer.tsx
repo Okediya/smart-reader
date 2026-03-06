@@ -117,7 +117,7 @@ function DocxViewer({ file }: { file: File }) {
             renderAsync(file, containerRef.current, undefined, {
                 className: "docx",
                 inWrapper: true,
-                ignoreWidth: false,
+                ignoreWidth: true, // IMPORTANT: Allows responsive scaling on mobile
                 ignoreHeight: false,
                 ignoreFonts: false,
                 breakPages: true,
@@ -135,7 +135,16 @@ function DocxViewer({ file }: { file: File }) {
 
     return (
         <div className="w-full h-full overflow-auto bg-[#f1f1f1] text-black">
-            <div ref={containerRef} className="docx-wrapper min-h-full" />
+            <style>{`
+                .docx-wrapper { padding: 16px !important; background: transparent !important; }
+                .docx-wrapper > section.docx { width: 100% !important; max-width: 800px !important; margin: 0 auto !important; min-height: auto !important; padding: 24px !important; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important; }
+                @media (max-width: 640px) {
+                    .docx-wrapper > section.docx { padding: 12px !important; }
+                    .docx-wrapper table { width: 100% !important; display: block; overflow-x: auto; }
+                    .docx-wrapper img { max-width: 100% !important; height: auto !important; }
+                }
+            `}</style>
+            <div ref={containerRef} className="docx-wrapper min-h-full w-full" />
         </div>
     );
 }
